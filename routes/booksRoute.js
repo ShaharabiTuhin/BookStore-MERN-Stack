@@ -1,31 +1,12 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import { PORT, mongoDBURL } from './config.js';
-import booksRoute from './routes/booksRoute.js';
-import { Book } from './models/bookModel.js';
-import cors from 'cors';
-
-// Initialize express app first!
-const app = express();
-
-// Parse JSON body
-app.use(express.json());
-
-// Middleware for handling CORS POLICY
-// Option 1: Allow All Origins with Default of cors(*)
-//app.use(cors());
-// Option 2: Allow Custom Origins
-app.use(
-   cors({
-     origin: 'http://localhost:3000',
-     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-     allowedHeaders: ['Content-Type'],
-   })
- );
+import { Book } from '../models/bookModel.js';
 
 
-// Route to save a new book
-app.post('/books', async (request, response) => {
+const router = express.Router();
+
+
+// Route for Save a new Book
+router.post('/', async (request, response) => {
   try {
     if (
       !request.body.title ||
@@ -42,7 +23,10 @@ app.post('/books', async (request, response) => {
       publishYear: request.body.publishYear,
     };
 
+
     const book = await Book.create(newBook);
+
+
     return response.status(201).send(book);
   } catch (error) {
     console.log(error.message);
@@ -50,48 +34,49 @@ app.post('/books', async (request, response) => {
   }
 });
 
-app.use('/books', booksRoute);
-
 
 // Route for Get All Books from database
-app.get('/books', async (request, response) => {
+router.get('/', async (request, response) => {
   try {
     const books = await Book.find({});
 
 
     return response.status(200).json({
       count: books.length,
-      data: books
+      data: books,
     });
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).send({ message: error.message });
-    }
-  });
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
+  }
+});
+
+
 // Route for Get One Book from database by id
-app.get('/books/:id', async (request, response) => {
+router.get('/:id', async (request, response) => {
   try {
-
-
     const { id } = request.params;
-   
+
+
     const book = await Book.findById(id);
 
 
     return response.status(200).json(book);
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).send({ message: error.message });
-    }
-  });
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
+  }
+});
+
+
 // Route for Update a Book
-app.put('/books/:id', async (request, response) => {
+router.put('/:id', async (request, response) => {
   try {
     if (
       !request.body.title ||
       !request.body.author ||
       !request.body.publishYear
-      ) {
+    ) {
       return response.status(400).send({
         message: 'Send all required fields: title, author, publishYear',
       });
@@ -110,13 +95,15 @@ app.put('/books/:id', async (request, response) => {
 
 
     return response.status(200).send({ message: 'Book updated successfully' });
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).send({ message: error.message });
-    }
-  });
+  } catch (error) {
+    console.log(error.message);
+    response.status(500).send({ message: error.message });
+  }
+});
+
+
 // Route for Delete a book
-app.delete('/books/:id', async (request, response) => {
+router.delete('/:id', async (request, response) => {
   try {
     const { id } = request.params;
 
@@ -130,28 +117,11 @@ app.delete('/books/:id', async (request, response) => {
 
 
     return response.status(200).send({ message: 'Book deleted successfully' });
-
-
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
   }
 });
 
-// Main route
-app.get('/', (request, response) => {
-  response.status(200).send('Welcome To BookStore MERN Stack Project');
-});
 
-// Start server after DB connection
-mongoose
-  .connect(mongoDBURL)
-  .then(() => {
-    console.log('App connected to database');
-    app.listen(PORT, () => {
-      console.log(`App is listening to port: ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+export default router;
