@@ -13,32 +13,33 @@ const BookSingleCard = ({ book }) => {
 
 
   return (
-    <div className='border-2 border-gray-500 rounded-lg px-4 py-2 m-4 relative hover:shadow-xl'>
-      <h2 className='absolute top-1 right-2 px-4 py-1 bg-red-300 rounded-lg'>
-        {book.publishYear}
+    <div className='bg-white/70 backdrop-blur-md border-2 border-purple-200 rounded-2xl p-6 m-4 relative hover:shadow-2xl hover:shadow-purple-500/30 transition-all duration-300 hover:scale-105 hover:border-purple-400'>
+      <h2 className='absolute top-3 right-3 px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-bold shadow-lg'>
+        📅 {book.publishYear}
       </h2>
-      <h4 className='my-2 text-gray-500'>{book._id}</h4>
-      <div className='flex justify-start items-center gap-x-2'>
-        <PiBookOpenTextLight className='text-red-300 text-2xl' />
-        <h2 className='my-1'>{book.title}</h2>
+      <h4 className='my-3 text-xs text-purple-400 font-mono truncate'>{book._id}</h4>
+      <div className='flex justify-start items-center gap-x-3 mb-3'>
+        <PiBookOpenTextLight className='text-purple-500 text-3xl' />
+        <h2 className='text-lg font-bold text-gray-900'>{book.title}</h2>
       </div>
-      <div className='flex justify-start items-center gap-x-2'>
-        <BiUserCircle className='text-red-300 text-2xl' />
-        <h2 className='my-1'>{book.author}</h2>
+      <div className='flex justify-start items-center gap-x-3 mb-4'>
+        <BiUserCircle className='text-pink-500 text-3xl' />
+        <h2 className='text-base text-gray-700'>{book.author}</h2>
       </div>
-      <div className='flex justify-between items-center gap-x-2 mt-4 p-4'>
+      <div className='flex justify-around items-center gap-x-2 mt-6 pt-4 border-t border-purple-100'>
         <BiShow
-          className='text-3xl text-blue-800 hover:text-black cursor-pointer'
+          className='text-4xl text-blue-600 hover:text-blue-700 cursor-pointer transition-all hover:scale-125 drop-shadow-lg'
           onClick={() => setShowModal(true)}
+          title='Quick View'
         />
         <Link to={`/books/details/${book._id}`}>
-          <BsInfoCircle className='text-2xl text-green-800 hover:text-black' />
+          <BsInfoCircle className='text-3xl text-green-600 hover:text-green-700 transition-all hover:scale-125 drop-shadow-lg' title='Details' />
         </Link>
         <Link to={`/books/edit/${book._id}`}>
-          <AiOutlineEdit className='text-2xl text-yellow-600 hover:text-black' />
+          <AiOutlineEdit className='text-3xl text-amber-600 hover:text-amber-700 transition-all hover:scale-125 drop-shadow-lg' title='Edit' />
         </Link>
         <Link to={`/books/delete/${book._id}`}>
-          <MdOutlineDelete className='text-2xl text-red-600 hover:text-black' />
+          <MdOutlineDelete className='text-3xl text-rose-600 hover:text-rose-700 transition-all hover:scale-125 drop-shadow-lg' title='Delete' />
         </Link>
       </div>
       {showModal && (

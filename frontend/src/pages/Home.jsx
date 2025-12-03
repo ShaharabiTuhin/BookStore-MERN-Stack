@@ -35,26 +35,34 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
-      <div className="max-w-7xl mx-auto p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Books List</h1>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      <div className="max-w-7xl mx-auto p-8 space-y-6">
+        <div className="flex items-center justify-between bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent">Books Collection</h1>
           <Link to="/create">
-            <MdOutlineAddBox className="text-sky-800 text-4xl" />
+            <MdOutlineAddBox className="text-purple-600 text-5xl hover:text-pink-600 transition-all hover:scale-110 drop-shadow-lg" />
           </Link>
         </div>
         <div className="flex justify-center items-center gap-x-4">
           <button
-            className={'bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg' + (showType === 'table' ? ' bg-sky-600' : '')}
+            className={`px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 ${
+              showType === 'table'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/50'
+                : 'bg-white/70 backdrop-blur-md text-purple-600 hover:bg-white border border-purple-200'
+            }`}
             onClick={() => setShowType('table')}
           >
-            Table
+            📋 Table
           </button>
           <button
-            className={'bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg' + (showType === 'card' ? ' bg-sky-600' : '')}
+            className={`px-6 py-2.5 rounded-xl font-semibold transition-all duration-300 ${
+              showType === 'card'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/50'
+                : 'bg-white/70 backdrop-blur-md text-purple-600 hover:bg-white border border-purple-200'
+            }`}
             onClick={() => setShowType('card')}
           >
-            Card
+            🎴 Card
           </button>
         </div>
         {showType === 'table' ? (
