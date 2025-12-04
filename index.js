@@ -16,135 +16,39 @@ app.use(express.json());
 // Change this to a more restrictive policy in production.
 app.use(cors());
 
-
-// Route to save a new book
-app.post('/books', async (request, response) => {
-  try {
-    if (
-      !request.body.title ||
-      !request.body.author ||
-      !request.body.publishYear
-    ) {
-      return response.status(400).send({
-        message: 'Send all required fields: title, author, publishYear',
-      });
-    }
-    const newBook = {
-      title: request.body.title,
-      author: request.body.author,
-      publishYear: request.body.publishYear,
-    };
-
-    const book = await Book.create(newBook);
-    return response.status(201).send(book);
-  } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
-  }
+// Health check endpoint
+app.get('/', (request, response) => {
+  response.status(200).json({ message: 'BookStore API is running', status: 'ok' });
 });
 
+// Use books routes
 app.use('/books', booksRoute);
 
-
-// Route for Get All Books from database
-app.get('/books', async (request, response) => {
-  try {
-    const books = await Book.find({});
-
-
-    return response.status(200).json({
-      count: books.length,
-      data: books
-    });
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).send({ message: error.message });
-    }
-  });
-// Route for Get One Book from database by id
-app.get('/books/:id', async (request, response) => {
-  try {
-
-
-    const { id } = request.params;
-   
-    const book = await Book.findById(id);
-
-
-    return response.status(200).json(book);
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).send({ message: error.message });
-    }
-  });
-// Route for Update a Book
-app.put('/books/:id', async (request, response) => {
-  try {
-    if (
-      !request.body.title ||
-      !request.body.author ||
-      !request.body.publishYear
-      ) {
-      return response.status(400).send({
-        message: 'Send all required fields: title, author, publishYear',
-      });
-    }
-
-
-    const { id } = request.params;
-
-
-    const result = await Book.findByIdAndUpdate(id, request.body);
-
-
-    if (!result) {
-      return response.status(404).json({ message: 'Book not found' });
-    }
-
-
-    return response.status(200).send({ message: 'Book updated successfully' });
-    } catch (error) {
-      console.log(error.message);
-      response.status(500).send({ message: error.message });
-    }
-  });
-// Route for Delete a book
-app.delete('/books/:id', async (request, response) => {
-  try {
-    const { id } = request.params;
-
-
-    const result = await Book.findByIdAndDelete(id);
-
-
-    if (!result) {
-      return response.status(404).json({ message: 'Book not found' });
-    }
-
-
-    return response.status(200).send({ message: 'Book deleted successfully' });
-
-
-  } catch (error) {
-    console.log(error.message);
-    response.status(500).send({ message: error.message });
-  }
-});
-
-// Main route
-app.get('/', (request, response) => {
-  response.status(200).send('Welcome To BookStore MERN Stack Project');
-});
-
 // Start server after DB connection
-mongoose
-  .connect(mongoDBURL)
-  .then(() => {
+let cachedDb = null;
+
+const connectDB = async () => {
+  if (cachedDb) {
+    return cachedDb;
+  }
+  try {
+    const connection = await mongoose.connect(mongoDBURL);
+    cachedDb = connection;
     console.log('App connected to database');
-    app.listen(PORT, () => {
-      console.log(`App is listening to port: ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+    return connection;
+  } catch (error) {
+    console.log('DB connection error:', error);
+    throw error;
+  }
+};
+
+connectDB();
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`App is listening to port: ${PORT}`);  });
+}
+
+// Export for Vercel serverless
+export default app;
