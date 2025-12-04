@@ -5,17 +5,18 @@ import BooksCard from '../home/BooksCard.jsx'
 import Spinner from '../components/Spinner.jsx'
 import { MdOutlineAddBox } from 'react-icons/md'
 import { Link } from 'react-router-dom'
+import API_BASE_URL from '../api'
 
 export default function Home() {
   const [books, setBooks] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [error, setError] = useState(''))
   const [showType, setShowType] = useState('table')
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const res = await axios.get('http://localhost:5555/books')
+        const res = await axios.get(`${API_BASE_URL}/books`)
         setBooks(res.data.data || [])
       } catch (e) {
         setError(e.message || 'Failed to load')

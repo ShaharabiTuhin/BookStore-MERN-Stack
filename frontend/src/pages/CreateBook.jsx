@@ -4,6 +4,7 @@ import { useSnackbar } from 'notistack'
 import { useNavigate } from 'react-router-dom'
 import BackButton from '../components/BackButton'
 import Spinner from '../components/Spinner'
+import API_BASE_URL from '../api'
 
 export default function CreateBook() {
   const [form, setForm] = useState({ title: '', author: '', publishYear: '' })
@@ -17,7 +18,7 @@ export default function CreateBook() {
     e.preventDefault()
     setLoading(true)
     try {
-      await axios.post('http://localhost:5555/books', form)
+      await axios.post(`${API_BASE_URL}/books`, form)
       enqueueSnackbar('📚 Book created successfully!', { variant: 'success' })
       setForm({ title: '', author: '', publishYear: '' })
       setTimeout(() => navigate('/'), 1500)

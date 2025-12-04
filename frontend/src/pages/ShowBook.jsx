@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import BackButton from '../components/BackButton'
 import Spinner from '../components/Spinner'
+import API_BASE_URL from '../api'
 
 export default function ShowBook() {
   const { id } = useParams()
@@ -14,7 +15,7 @@ export default function ShowBook() {
   useEffect(() => {
     const run = async () => {
       try {
-        const res = await axios.get(`http://localhost:5555/books/${id}`)
+        const res = await axios.get(`${API_BASE_URL}/books/${id}`)
         setBook(res.data)
         enqueueSnackbar('📚 Book loaded successfully!', { variant: 'success' })
       } catch (e) {

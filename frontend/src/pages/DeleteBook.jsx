@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import BackButton from '../components/BackButton'
 import Spinner from '../components/Spinner'
+import API_BASE_URL from '../api'
 
 export default function DeleteBook() {
   const { id } = useParams()
@@ -14,7 +15,7 @@ export default function DeleteBook() {
   const handleDelete = async () => {
     setLoading(true)
     try {
-      await axios.delete(`http://localhost:5555/books/${id}`)
+      await axios.delete(`${API_BASE_URL}/books/${id}`)
       enqueueSnackbar('🗑️ Book deleted successfully!', { variant: 'success' })
       setTimeout(() => navigate('/'), 1500)
     } catch (e) {

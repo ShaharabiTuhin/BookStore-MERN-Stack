@@ -7,7 +7,7 @@ export default function EditBook({ id }) {
 
   useEffect(() => {
     const run = async () => {
-      const res = await axios.get(`http://localhost:5555/books/${id}`)
+      const res = await axios.get(`https://book-store-mern-beige.vercel.app/books/${id}`)
       setForm({ title: res.data.title || '', author: res.data.author || '', publishYear: res.data.publishYear || '' })
     }
     run()
@@ -19,7 +19,7 @@ export default function EditBook({ id }) {
     e.preventDefault()
     setMsg('')
     try {
-      await axios.put(`http://localhost:5555/books/${id}`, form)
+      await axios.put(`https://book-store-mern-beige.vercel.app/books/${id}`, form)
       setMsg('Book updated successfully')
     } catch (err) {
       setMsg(err.response?.data?.message || err.message)
