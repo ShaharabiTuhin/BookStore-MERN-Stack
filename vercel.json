@@ -8,15 +8,9 @@
   ],
   "routes": [
     {
-      "src": "/books/(.*)",
-      "dest": "Backend/index.js"
-    },
-    {
       "src": "/(.*)",
-      "dest": "Backend/index.js"
+      "dest": "Backend/index.js",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
