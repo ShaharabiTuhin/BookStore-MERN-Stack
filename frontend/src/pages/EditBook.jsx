@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import API_BASE_URL from '../api'
 
 export default function EditBook({ id }) {
   const [form, setForm] = useState({ title: '', author: '', publishYear: '' })
@@ -7,7 +8,7 @@ export default function EditBook({ id }) {
 
   useEffect(() => {
     const run = async () => {
-      const res = await axios.get(`https://book-store-mern-beige.vercel.app/books/${id}`)
+      const res = await axios.get(`${API_BASE_URL}/books/${id}`)
       setForm({ title: res.data.title || '', author: res.data.author || '', publishYear: res.data.publishYear || '' })
     }
     run()
@@ -19,7 +20,7 @@ export default function EditBook({ id }) {
     e.preventDefault()
     setMsg('')
     try {
-      await axios.put(`https://book-store-mern-beige.vercel.app/books/${id}`, form)
+      await axios.put(`${API_BASE_URL}/books/${id}`, form)
       setMsg('Book updated successfully')
     } catch (err) {
       setMsg(err.response?.data?.message || err.message)
